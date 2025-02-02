@@ -6,24 +6,20 @@
 module.exports.getDaysToNewYear = function getDaysToNewYear(targetDate: Date | string): number {
   let date: Date;
 
-  if(typeof targetDate === 'string') {
-    date = new Date(targetDate.split('.').reverse().join('-'));
+  if (typeof targetDate === 'string') {
+    const [day, month, year] = targetDate.split('.').map(Number);
+    if (!day || !month || !year) {
+      throw new Error("Invalid date format");
+    }
+    date = new Date (year, month - 1, day) ;
   } else {
-    date = targetDate;
+    date = new Date (targetDate);
+  }  
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date");
   }
-
-  if(!(date instanceof Date) || isNaN(date.getTime())){
-    throw new Error;
-  }
-
-  let nextNewYear = new Date(date.getFullYear() + 1, 0, 1);
-  if(date.getMonth() === 0 && date.getDate() === 1) {
-    nextNewYear = new Date(date.getFullYear() + 2, 0, 1);
-  } 
-  if(date > nextNewYear) {
-    nextNewYear = new Date(date.getFullYear() + 1, 0, 1);
-  }
-  const diffInMs = nextNewYear.getTime() - date.getTime();
-  const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-  return diffInDays;
+  const targetNewYear = new Date(2024, 0, 1);
+  const timeDiff = targetNewYear.getTime() - date.getTime();
+  const diffInDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+  return diffInDays; 
 };
