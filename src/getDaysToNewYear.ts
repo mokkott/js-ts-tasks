@@ -4,5 +4,26 @@
  * @returns {number}
  */
 module.exports.getDaysToNewYear = function getDaysToNewYear(targetDate: Date | string): number {
-  throw new Error('Not implemented'); // delete this line and write your code
+  let date: Date;
+
+  if(typeof targetDate === 'string') {
+    date = new Date(targetDate.split('.').reverse().join('-'));
+  } else {
+    date = targetDate;
+  }
+
+  if(!(date instanceof Date) || isNaN(date.getTime())){
+    throw new Error;
+  }
+
+  let nextNewYear = new Date(date.getFullYear() + 1, 0, 1);
+  if(date.getMonth() === 0 && date.getDate() === 1) {
+    nextNewYear = new Date(date.getFullYear() + 2, 0, 1);
+  } 
+  if(date > nextNewYear) {
+    nextNewYear = new Date(date.getFullYear() + 1, 0, 1);
+  }
+  const diffInMs = nextNewYear.getTime() - date.getTime();
+  const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+  return diffInDays;
 };

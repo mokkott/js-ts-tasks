@@ -10,6 +10,15 @@
  * @returns {Object<employees: Array<any>, contractors: Array<any>>}
  */
 module.exports.groupUsers = function (users: Array<unknown>): Record<'employees' | 'contractors', Array<unknown>> {
-  // replace Array<unknown> with your own types
-  throw new Error('Not implemented'); // delete this line and write your code
+  return users.reduce<Record<'employees' | 'contractors', Array<unknown>>>(
+    (result, user) => {
+      if((user as any)?.type === 'EMPLOYEE') {
+        result.employees.push(user);
+      } else if ((user as any)?.type === 'CONTRACTOR') {
+        result.contractors.push(user);
+      }
+      return result;
+    },
+    {employees: [], contractors: []}
+  );
 };
